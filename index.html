@@ -21,8 +21,35 @@ button,input,textarea,select{font:inherit}button{border:0;border-radius:14px;pad
 dialog{border:0;border-radius:24px;width:min(92%,600px);padding:0;box-shadow:0 20px 60px #0005}dialog::backdrop{background:#0008}.modal{padding:20px}.modal h2{margin-top:0}.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}.field input,.field textarea,.field select{width:100%;padding:12px;border:1px solid #ddd;border-radius:12px;background:#fafafa}.field textarea{min-height:180px;resize:vertical}.row{display:flex;gap:10px}.row>*{flex:1}
 .empty{text-align:center;color:#6e6e73;padding:50px 10px}.count{font-size:13px;color:#6e6e73}
 </style>
+ <style>
+  #splash-screen {
+    position: fixed;
+    inset: 0;
+    background: #050b18;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+  }
+
+  #splash-screen img {
+    width: 75%;
+    max-width: 420px;
+    border-radius: 25px;
+  }
+
+  #splash-screen.oculto {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
 </head>
 <body>
+ <div id="splash-screen">
+  <img src="logo.png" alt="Creando Prompts">
+</div>
 <div class="app">
 <header><div><h1>Mis Prompts</h1><div class="sub">Tu biblioteca personal de IA</div></div><button class="primary" onclick="openNew()">＋ Nuevo</button></header>
 <input id="search" class="search" placeholder="🔎 Buscar prompts..." oninput="render()">
@@ -81,6 +108,18 @@ function toggleFav(id){data=data.map(x=>x.id===id?{...x,favorite:!x.favorite}:x)
 function delPrompt(id){if(confirm("¿Eliminar este prompt?")){data=data.filter(x=>x.id!==id);localStorage.setItem("misPrompts",JSON.stringify(data));render()}}
 init();
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+</script>
+ <script>
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      const splash = document.getElementById("splash-screen");
+      splash.classList.add("oculto");
+
+      setTimeout(function () {
+        splash.remove();
+      }, 600);
+    }, 1800);
+  });
 </script>
 </body>
 </html>
