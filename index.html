@@ -1,392 +1,1198 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111111">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Mis Prompts">
-<link rel="apple-touch-icon" href="./logo.PNG">
-<link rel="manifest" href="./manifest.json">
-<title>Mis Prompts</title>
-<style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;color:#111;background:#f5f5f7}
-*{box-sizing:border-box}body{margin:0}.app{max-width:760px;margin:auto;padding:env(safe-area-inset-top) 16px 32px}
-header{padding:24px 4px 14px;display:flex;justify-content:space-between;align-items:center}
-h1{font-size:32px;margin:0}.sub{color:#6e6e73;margin-top:4px}
-button,input,textarea,select{font:inherit}button{border:0;border-radius:14px;padding:12px 15px;font-weight:600;cursor:pointer}
-.primary{background:#111;color:#fff}.search{width:100%;padding:14px 16px;border:1px solid #ddd;border-radius:16px;background:white;margin:8px 0 14px}
-.chips{display:flex;gap:8px;overflow:auto;padding-bottom:10px}.chip{white-space:nowrap;background:white;border:1px solid #ddd;padding:9px 12px;border-radius:999px}.chip.active{background:#111;color:#fff}
-.card{background:#fff;border-radius:20px;padding:16px;margin:10px 0;box-shadow:0 1px 4px #00000010}.card h3{margin:0 0 6px}.meta{font-size:13px;color:#6e6e73;margin-bottom:10px}.prompt{white-space:pre-wrap;line-height:1.4;color:#333;max-height:120px;overflow:hidden}.actions{display:flex;gap:8px;margin-top:12px}.actions button{background:#f0f0f2}.actions .copy{background:#111;color:#fff}
-dialog{border:0;border-radius:24px;width:min(92%,600px);padding:0;box-shadow:0 20px 60px #0005}dialog::backdrop{background:#0008}.modal{padding:20px}.modal h2{margin-top:0}.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}.field input,.field textarea,.field select{width:100%;padding:12px;border:1px solid #ddd;border-radius:12px;background:#fafafa}.field textarea{min-height:180px;resize:vertical}.row{display:flex;gap:10px}.row>*{flex:1}
-.empty{text-align:center;color:#6e6e73;padding:50px 10px}.count{font-size:13px;color:#6e6e73}
-</style>
- <style>
-  #splash-screen {
-    position: fixed;
-    inset: 0;
-    background: #050b18;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    opacity: 1;
-    transition: opacity 0.6s ease;
-  }
+  <meta charset="UTF-8">
 
-  #splash-screen img {
-    width: 75%;
-    max-width: 420px;
-    border-radius: 25px;
-  }
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  #splash-screen.oculto {
-    opacity: 0;
-    pointer-events: none;
-  }
-</style>
+  <meta name="theme-color" content="#111111">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Mis Prompts">
+
+  <link rel="apple-touch-icon" href="./logo.PNG">
+  <link rel="manifest" href="./manifest.json">
+
+  <title>Mis Prompts</title>
+
+  <style>
+    :root {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      color: #111;
+      background: #f5f5f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    .app {
+      max-width: 760px;
+      margin: auto;
+      padding: env(safe-area-inset-top) 16px 32px;
+    }
+
+    header {
+      padding: 24px 4px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin: 0;
+    }
+
+    .sub {
+      color: #6e6e73;
+      margin-top: 4px;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #111;
+      color: #fff;
+    }
+
+    .search {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #ddd;
+      border-radius: 16px;
+      background: white;
+      margin: 8px 0 14px;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      overflow: auto;
+      padding-bottom: 10px;
+    }
+
+    .chip {
+      white-space: nowrap;
+      background: white;
+      border: 1px solid #ddd;
+      padding: 9px 12px;
+      border-radius: 999px;
+    }
+
+    .chip.active {
+      background: #111;
+      color: #fff;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 16px;
+      margin: 10px 0;
+      box-shadow: 0 1px 4px #00000010;
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+    }
+
+    .meta {
+      font-size: 13px;
+      color: #6e6e73;
+      margin-bottom: 10px;
+    }
+
+    .prompt {
+      white-space: pre-wrap;
+      line-height: 1.4;
+      color: #333;
+      max-height: 120px;
+      overflow: hidden;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .actions button {
+      background: #f0f0f2;
+      color: #111;
+    }
+
+    .actions .primary {
+      background: #111;
+      color: #fff;
+    }
+
+    .actions .copy {
+      background: #111;
+      color: #fff;
+    }
+
+    dialog {
+      border: 0;
+      border-radius: 24px;
+      width: min(92%, 600px);
+      padding: 0;
+      box-shadow: 0 20px 60px #0005;
+    }
+
+    dialog::backdrop {
+      background: #0008;
+    }
+
+    .modal {
+      padding: 20px;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+    }
+
+    .field {
+      margin: 12px 0;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      background: #fafafa;
+    }
+
+    .field textarea {
+      min-height: 180px;
+      resize: vertical;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .row > * {
+      flex: 1;
+    }
+
+    .empty {
+      text-align: center;
+      color: #6e6e73;
+      padding: 50px 10px;
+    }
+
+    .count {
+      font-size: 13px;
+      color: #6e6e73;
+    }
+
+    /* PANTALLA DE BIENVENIDA */
+
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      background: #050b18;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+    }
+
+    #splash-screen img {
+      width: 75%;
+      max-width: 420px;
+      border-radius: 25px;
+    }
+
+    #splash-screen.oculto {
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
 </head>
+
 <body>
- <div id="splash-screen">
-  <img src="logo.PNG" alt="Creando Prompts">
-</div>
-<div class="app">
-<header><div><h1>Mis Prompts</h1><div class="sub">Tu biblioteca personal de IA</div></div><button class="primary" onclick="openNew()">＋ Nuevo</button></header>
-<input id="search" class="search" placeholder="🔎 Buscar prompts..." oninput="render()">
-<div id="chips" class="chips"></div>
-<div class="count" id="count"></div>
-<div id="list"></div>
-</div>
 
-<dialog id="dlg">
-<div class="modal">
-<h2 id="dlgTitle">Nuevo prompt</h2>
-<div class="field"><label>Título</label><input id="title" placeholder="Ej. Vaquero cinematográfico"></div>
-<div class="row">
-<div class="field"><label>Categoría</label><select id="category"></select></div>
-<div class="field"><label>Modelo</label><select id="model"><option>Seedream 4.5</option><option>CapCut</option><option>Otro</option></select></div>
-</div>
-<div class="field"><label>Formato</label><select id="ratio"><option>9:16</option><option>3:4</option><option>16:9</option><option>1:1</option><option>Otro</option></select></div>
-<div class="field"><label>Prompt</label><textarea id="prompt" placeholder="Escribe aquí tu prompt..."></textarea></div>
-<div class="actions">
-  <button onclick="closeDlg()">Cancelar</button>
-  <button class="primary" type="button" onclick="savePrompt()">Guardar</button>
-</div>
-</div>
-</dialog>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL = "https://fwacwaptqxhygifqfnsc.supabase.co";
-const SUPABASE_KEY = "sb_publishable_...";
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-const cats = [
-  "Todos",
-  "CapCut",
-  "Seedream",
-  "Imágenes",
-  "Video",
-  "México",
-  "Vaquero",
-  "Religioso",
-  "Ideas"
-];
+  <!-- PANTALLA DE BIENVENIDA -->
 
-let data = [];
-let editing = null;
-let active = "Todos";
+  <div id="splash-screen">
+    <img src="./logo.PNG" alt="Mis Prompts">
+  </div>
 
-const $ = id => document.getElementById(id);
 
-function esc(s) {
-  return String(s).replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
-  }[c]));
-}
+  <!-- APLICACIÓN -->
 
-async function cargarPrompts() {
-  const { data: prompts, error } = await supabaseClient
-    .from("prompts")
-    .select("*")
-    .order("created_at", { ascending: false });
+  <div class="app">
 
-  if (error) {
-    console.error("Error cargando prompts:", error);
-    alert("No se pudieron cargar los prompts.");
-    return;
-  }
+    <header>
+      <div>
+        <h1>Mis Prompts</h1>
+        <div class="sub">Tu biblioteca personal de IA</div>
+      </div>
 
-  data = prompts || [];
-  render();
-}
+      <button class="primary" onclick="openNew()">
+        ＋ Nuevo
+      </button>
+    </header>
 
-async function migrarPromptsLocales() {
-  const locales = JSON.parse(
-    localStorage.getItem("misPrompts") || "[]"
-  );
 
-  if (!locales.length) return;
+    <!-- BUSCADOR -->
 
-  const { data: existentes, error } = await supabaseClient
-    .from("prompts")
-    .select("id");
+    <input
+      id="search"
+      class="search"
+      placeholder="🔎 Buscar prompts..."
+      oninput="render()"
+    >
 
-  if (error) {
-    console.error(error);
-    return;
-  }
 
-  const idsExistentes = new Set(
-    (existentes || []).map(x => x.id)
-  );
+    <!-- CATEGORÍAS -->
 
-  const nuevos = locales
-    .filter(x => !idsExistentes.has(x.id))
-    .map(x => ({
-      id: x.id,
-      title: x.title || "Sin título",
-      prompt: x.prompt || "",
-      category: x.category || "Ideas",
-      model: x.model || "Otro",
-      ratio: x.ratio || "9:16",
-      favorite: !!x.favorite
-    }));
+    <div id="chips" class="chips"></div>
 
-  if (!nuevos.length) return;
 
-  const { error: insertError } = await supabaseClient
-    .from("prompts")
-    .insert(nuevos);
+    <!-- CONTADOR -->
 
-  if (insertError) {
-    console.error("Error migrando prompts:", insertError);
-    return;
-  }
+    <div class="count" id="count"></div>
 
-  console.log("Prompts locales migrados correctamente.");
 
-  localStorage.removeItem("misPrompts");
-}
+    <!-- LISTA -->
 
-function init() {
-  $("category").innerHTML =
-    cats.slice(1)
-      .map(c => `<option>${c}</option>`)
-      .join("");
+    <div id="list"></div>
 
-  $("chips").innerHTML =
-    cats.map(c =>
-      `<button class="chip ${c === "Todos" ? "active" : ""}"
-       onclick="setCat('${c}')">${c}</button>`
-    ).join("");
+  </div>
 
-  cargarPrompts();
-}
 
-function setCat(c) {
-  active = c;
+  <!-- VENTANA NUEVO / EDITAR -->
 
-  document.querySelectorAll(".chip")
-    .forEach(x =>
-      x.classList.toggle("active", x.textContent === c)
+  <dialog id="dlg">
+
+    <div class="modal">
+
+      <h2 id="dlgTitle">
+        Nuevo prompt
+      </h2>
+
+
+      <div class="field">
+
+        <label>
+          Título
+        </label>
+
+        <input
+          id="title"
+          placeholder="Ej. Vaquero cinematográfico"
+        >
+
+      </div>
+
+
+      <div class="row">
+
+        <div class="field">
+
+          <label>
+            Categoría
+          </label>
+
+          <select id="category"></select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Modelo
+          </label>
+
+          <select id="model">
+
+            <option>
+              Seedream 4.5
+            </option>
+
+            <option>
+              CapCut
+            </option>
+
+            <option>
+              Otro
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Formato
+        </label>
+
+        <select id="ratio">
+
+          <option>9:16</option>
+          <option>3:4</option>
+          <option>16:9</option>
+          <option>1:1</option>
+          <option>Otro</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Prompt
+        </label>
+
+        <textarea
+          id="prompt"
+          placeholder="Escribe aquí tu prompt..."
+        ></textarea>
+
+      </div>
+
+
+      <div class="actions">
+
+        <button onclick="closeDlg()">
+          Cancelar
+        </button>
+
+        <button
+          class="primary"
+          type="button"
+          onclick="savePrompt()"
+        >
+          Guardar
+        </button>
+
+      </div>
+
+    </div>
+
+  </dialog>
+
+
+  <!-- SUPABASE -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://fwacwaptqxhygifqfnsc.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_...";
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    /* CATEGORÍAS */
+
+    const cats = [
+      "Todos",
+      "CapCut",
+      "Seedream",
+      "Imágenes",
+      "Video",
+      "México",
+      "Vaquero",
+      "Religioso",
+      "Ideas"
+    ];
+
+
+    /* ESTADO */
+
+    let data = [];
+
+    let editing = null;
+
+    let active = "Todos";
+
+
+    const $ = id =>
+      document.getElementById(id);
+
+
+    /* ESCAPAR HTML */
+
+    function esc(value) {
+
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* CARGAR PROMPTS */
+
+    async function cargarPrompts() {
+
+      const {
+        data: prompts,
+        error
+      } = await supabaseClient
+        .from("prompts")
+        .select("*")
+        .order("created_at", {
+          ascending: false
+        });
+
+
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "No se pudieron cargar los prompts."
+        );
+
+        return;
+
+      }
+
+
+      data = prompts || [];
+
+      render();
+
+    }
+
+
+    /* MIGRAR PROMPTS ANTIGUOS */
+
+    async function migrarPromptsLocales() {
+
+      const locales =
+        JSON.parse(
+          localStorage.getItem("misPrompts") || "[]"
+        );
+
+
+      if (!locales.length) {
+        return;
+      }
+
+
+      const {
+        data: existentes,
+        error
+      } = await supabaseClient
+        .from("prompts")
+        .select("id");
+
+
+      if (error) {
+
+        console.error(error);
+
+        return;
+
+      }
+
+
+      const idsExistentes =
+        new Set(
+          (existentes || [])
+            .map(x => x.id)
+        );
+
+
+      const nuevos =
+        locales
+
+          .filter(
+            x => !idsExistentes.has(x.id)
+          )
+
+          .map(x => ({
+
+            id: x.id,
+
+            title:
+              x.title ||
+              "Sin título",
+
+            prompt:
+              x.prompt ||
+              "",
+
+            category:
+              x.category ||
+              "Ideas",
+
+            model:
+              x.model ||
+              "Otro",
+
+            ratio:
+              x.ratio ||
+              "9:16",
+
+            favorite:
+              !!x.favorite
+
+          }));
+
+
+      if (!nuevos.length) {
+        return;
+      }
+
+
+      const {
+        error: insertError
+      } = await supabaseClient
+        .from("prompts")
+        .insert(nuevos);
+
+
+      if (insertError) {
+
+        console.error(
+          "Error migrando prompts:",
+          insertError
+        );
+
+        return;
+
+      }
+
+
+      console.log(
+        "Prompts locales migrados correctamente."
+      );
+
+
+      /*
+        IMPORTANTE:
+        Conservamos la copia local
+        hasta comprobar que todo
+        se haya migrado correctamente.
+      */
+
+      console.log(
+        "Migración completada. Se conserva la copia local."
+      );
+
+    }
+
+
+    /* INICIAR INTERFAZ */
+
+    function init() {
+
+      $("category").innerHTML =
+        cats
+          .filter(x => x !== "Todos")
+          .map(
+            x =>
+              `<option>${esc(x)}</option>`
+          )
+          .join("");
+
+
+      $("chips").innerHTML =
+        cats
+          .map(
+            x =>
+              `<button
+                class="chip ${x === "Todos" ? "active" : ""}"
+                onclick="setCat('${esc(x)}')"
+              >
+                ${esc(x)}
+              </button>`
+          )
+          .join("");
+
+    }
+
+
+    /* INICIAR APP */
+
+    async function iniciarApp() {
+
+      await migrarPromptsLocales();
+
+      await cargarPrompts();
+
+    }
+
+
+    /* CAMBIAR CATEGORÍA */
+
+    function setCat(cat) {
+
+      active = cat;
+
+
+      document
+        .querySelectorAll(".chip")
+        .forEach(btn => {
+
+          btn.classList.toggle(
+            "active",
+            btn.textContent.trim() === cat
+          );
+
+        });
+
+
+      render();
+
+    }
+
+
+    /* MOSTRAR PROMPTS */
+
+    function render() {
+
+      const q =
+        $("search").value
+          .trim()
+          .toLowerCase();
+
+
+      const filtrados =
+        data.filter(x => {
+
+          const coincideCategoria =
+            active === "Todos" ||
+            x.category === active;
+
+
+          const coincideBusqueda =
+            !q ||
+            x.title
+              .toLowerCase()
+              .includes(q) ||
+            x.prompt
+              .toLowerCase()
+              .includes(q) ||
+            x.category
+              .toLowerCase()
+              .includes(q);
+
+
+          return (
+            coincideCategoria &&
+            coincideBusqueda
+          );
+
+        });
+
+
+      $("count").textContent =
+        `${filtrados.length} prompt${
+          filtrados.length === 1 ? "" : "s"
+        }`;
+
+
+      if (!filtrados.length) {
+
+        $("list").innerHTML =
+          `<div class="empty">
+            No hay prompts todavía.
+          </div>`;
+
+        return;
+
+      }
+
+
+      $("list").innerHTML =
+        filtrados
+          .map(x => `
+
+            <div class="card">
+
+              <h3>
+                ${esc(x.title)}
+              </h3>
+
+              <div class="meta">
+
+                ${esc(x.category)}
+                ·
+                ${esc(x.model)}
+                ·
+                ${esc(x.ratio)}
+
+              </div>
+
+              <div class="prompt">
+                ${esc(x.prompt)}
+              </div>
+
+
+              <div class="actions">
+
+                <button
+                  class="copy"
+                  onclick="copyPrompt('${esc(x.id)}')"
+                >
+                  Copiar
+                </button>
+
+                <button
+                  onclick="toggleFav('${esc(x.id)}')"
+                >
+                  ${x.favorite ? "★" : "☆"}
+                </button>
+
+                <button
+                  onclick="editPrompt('${esc(x.id)}')"
+                >
+                  Editar
+                </button>
+
+                <button
+                  onclick="delPrompt('${esc(x.id)}')"
+                >
+                  Eliminar
+                </button>
+
+              </div>
+
+            </div>
+
+          `)
+          .join("");
+
+    }
+
+
+    /* NUEVO */
+
+    function openNew() {
+
+      editing = null;
+
+      $("dlgTitle").textContent =
+        "Nuevo prompt";
+
+      $("title").value = "";
+
+      $("prompt").value = "";
+
+      $("category").value =
+        "Ideas";
+
+      $("model").value =
+        "Seedream 4.5";
+
+      $("ratio").value =
+        "9:16";
+
+
+      $("dlg").showModal();
+
+    }
+
+
+    /* EDITAR */
+
+    function editPrompt(id) {
+
+      const x =
+        data.find(
+          item => item.id === id
+        );
+
+
+      if (!x) return;
+
+
+      editing = id;
+
+
+      $("dlgTitle").textContent =
+        "Editar prompt";
+
+
+      $("title").value =
+        x.title || "";
+
+
+      $("prompt").value =
+        x.prompt || "";
+
+
+      $("category").value =
+        x.category || "Ideas";
+
+
+      $("model").value =
+        x.model || "Otro";
+
+
+      $("ratio").value =
+        x.ratio || "9:16";
+
+
+      $("dlg").showModal();
+
+    }
+
+
+    /* GUARDAR */
+
+    async function savePrompt() {
+
+      const obj = {
+
+        id:
+          editing ||
+          crypto.randomUUID(),
+
+        title:
+          $("title").value.trim() ||
+          "Sin título",
+
+        prompt:
+          $("prompt").value.trim(),
+
+        category:
+          $("category").value,
+
+        model:
+          $("model").value,
+
+        ratio:
+          $("ratio").value,
+
+        favorite:
+          editing
+            ? !!data.find(
+                x => x.id === editing
+              )?.favorite
+            : false
+
+      };
+
+
+      let error;
+
+
+      if (editing) {
+
+        const result =
+          await supabaseClient
+
+            .from("prompts")
+
+            .update(obj)
+
+            .eq("id", editing);
+
+
+        error =
+          result.error;
+
+      } else {
+
+        const result =
+          await supabaseClient
+
+            .from("prompts")
+
+            .insert(obj);
+
+
+        error =
+          result.error;
+
+      }
+
+
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "No se pudo guardar el prompt."
+        );
+
+        return;
+
+      }
+
+
+      closeDlg();
+
+      await cargarPrompts();
+
+    }
+
+
+    /* CERRAR */
+
+    function closeDlg() {
+
+      $("dlg").close();
+
+    }
+
+
+    /* COPIAR */
+
+    async function copyPrompt(id) {
+
+      const x =
+        data.find(
+          item => item.id === id
+        );
+
+
+      if (!x) return;
+
+
+      try {
+
+        await navigator.clipboard.writeText(
+          x.prompt
+        );
+
+
+        alert(
+          "Prompt copiado."
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "No se pudo copiar."
+        );
+
+      }
+
+    }
+
+
+    /* FAVORITO */
+
+    async function toggleFav(id) {
+
+      const x =
+        data.find(
+          item => item.id === id
+        );
+
+
+      if (!x) return;
+
+
+      const {
+        error
+      } = await supabaseClient
+
+        .from("prompts")
+
+        .update({
+          favorite: !x.favorite
+        })
+
+        .eq("id", id);
+
+
+      if (error) {
+
+        console.error(error);
+
+        return;
+
+      }
+
+
+      await cargarPrompts();
+
+    }
+
+
+    /* ELIMINAR */
+
+    async function delPrompt(id) {
+
+      const x =
+        data.find(
+          item => item.id === id
+        );
+
+
+      if (!x) return;
+
+
+      const confirmar =
+        confirm(
+          `¿Eliminar "${x.title}"?`
+        );
+
+
+      if (!confirmar) {
+        return;
+      }
+
+
+      const {
+        error
+      } = await supabaseClient
+
+        .from("prompts")
+
+        .delete()
+
+        .eq("id", id);
+
+
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "No se pudo eliminar."
+        );
+
+        return;
+
+      }
+
+
+      await cargarPrompts();
+
+    }
+
+
+    /* INICIAR */
+
+    init();
+
+    iniciarApp();
+
+
+    /* SERVICE WORKER */
+
+    if ("serviceWorker" in navigator) {
+
+      navigator.serviceWorker.register(
+        "./sw.js"
+      )
+
+      .then(() => {
+
+        console.log(
+          "Service Worker registrado."
+        );
+
+      })
+
+      .catch(error => {
+
+        console.error(
+          "Error Service Worker:",
+          error
+        );
+
+      });
+
+    }
+
+
+    /* QUITAR SPLASH */
+
+    window.addEventListener(
+      "load",
+      function () {
+
+        setTimeout(
+          function () {
+
+            const splash =
+              document.getElementById(
+                "splash-screen"
+              );
+
+
+            if (splash) {
+
+              splash.classList.add(
+                "oculto"
+              );
+
+
+              setTimeout(
+                function () {
+
+                  splash.remove();
+
+                },
+                600
+              );
+
+            }
+
+          },
+          1800
+        );
+
+      }
     );
 
-  render();
-}
+  </script>
 
-function render() {
-  const q = $("search").value.toLowerCase();
-
-  const arr = data.filter(x =>
-    (active === "Todos" || x.category === active) &&
-    `${x.title} ${x.prompt} ${x.model} ${x.category}`
-      .toLowerCase()
-      .includes(q)
-  );
-
-  $("count").textContent =
-    `${arr.length} prompt${arr.length === 1 ? "" : "s"}`;
-
-  $("list").innerHTML = arr.length
-    ? arr.map(x => `
-      <article class="card">
-        <h3>${esc(x.favorite ? "⭐ " : "")}${esc(x.title)}</h3>
-
-        <div class="meta">
-          ${esc(x.category)} ·
-          ${esc(x.model)} ·
-          ${esc(x.ratio)}
-        </div>
-
-        <div class="prompt">${esc(x.prompt)}</div>
-
-        <div class="actions">
-          <button class="copy"
-            onclick="copyPrompt('${x.id}')">
-            Copiar
-          </button>
-
-          <button onclick="editPrompt('${x.id}')">
-            Editar
-          </button>
-
-          <button onclick="toggleFav('${x.id}')">
-            ${x.favorite ? "★" : "☆"}
-          </button>
-
-          <button onclick="delPrompt('${x.id}')">
-            Eliminar
-          </button>
-        </div>
-      </article>
-    `).join("")
-    : `<div class="empty">
-        No hay prompts todavía.<br><br>
-        Pulsa <b>＋ Nuevo</b> para guardar el primero.
-      </div>`;
-}
-
-function openNew() {
-  editing = null;
-
-  $("dlgTitle").textContent = "Nuevo prompt";
-  $("title").value = "";
-  $("prompt").value = "";
-  $("category").value = "Ideas";
-  $("model").value = "Seedream 4.5";
-  $("ratio").value = "9:16";
-
-  $("dlg").showModal();
-}
-
-function editPrompt(id) {
-  const x = data.find(a => a.id === id);
-
-  if (!x) return;
-
-  editing = id;
-
-  $("dlgTitle").textContent = "Editar prompt";
-  $("title").value = x.title;
-  $("prompt").value = x.prompt;
-  $("category").value = x.category;
-  $("model").value = x.model;
-  $("ratio").value = x.ratio;
-
-  $("dlg").showModal();
-}
-
-async function savePrompt() {
-  const obj = {
-    id: editing || crypto.randomUUID(),
-    title: $("title").value.trim() || "Sin título",
-    prompt: $("prompt").value.trim(),
-    category: $("category").value,
-    model: $("model").value,
-    ratio: $("ratio").value,
-    favorite: editing
-      ? !!data.find(x => x.id === editing)?.favorite
-      : false
-  };
-
-  let error;
-
-  if (editing) {
-    const result = await supabaseClient
-      .from("prompts")
-      .update(obj)
-      .eq("id", editing);
-
-    error = result.error;
-
-  } else {
-    const result = await supabaseClient
-      .from("prompts")
-      .insert(obj);
-
-    error = result.error;
-  }
-
-  if (error) {
-    console.error(error);
-    alert("No se pudo guardar el prompt.");
-    return;
-  }
-
-  closeDlg();
-  await cargarPrompts();
-}
-
-function closeDlg() {
-  $("dlg").close();
-}
-
-async function copyPrompt(id) {
-  const x = data.find(a => a.id === id);
-
-  if (!x) return;
-
-  await navigator.clipboard.writeText(x.prompt);
-
-  alert("Prompt copiado");
-}
-
-async function toggleFav(id) {
-  const x = data.find(a => a.id === id);
-
-  if (!x) return;
-
-  const { error } = await supabaseClient
-    .from("prompts")
-    .update({
-      favorite: !x.favorite
-    })
-    .eq("id", id);
-
-  if (error) {
-    console.error(error);
-    alert("No se pudo actualizar el favorito.");
-    return;
-  }
-
-  await cargarPrompts();
-}
-
-async function delPrompt(id) {
-  if (!confirm("¿Eliminar este prompt?")) return;
-
-  const { error } = await supabaseClient
-    .from("prompts")
-    .delete()
-    .eq("id", id);
-
-  if (error) {
-    console.error(error);
-    alert("No se pudo eliminar el prompt.");
-    return;
-  }
-
-  await cargarPrompts();
-}
-
-async function iniciarApp() {
-  await migrarPromptsLocales();
-  await cargarPrompts();
-}
-
-init();
-iniciarApp();
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./sw.js");
-}
-</script>
 </body>
 </html>
