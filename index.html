@@ -69,7 +69,10 @@ dialog{border:0;border-radius:24px;width:min(92%,600px);padding:0;box-shadow:0 2
 </div>
 <div class="field"><label>Formato</label><select id="ratio"><option>9:16</option><option>3:4</option><option>16:9</option><option>1:1</option><option>Otro</option></select></div>
 <div class="field"><label>Prompt</label><textarea id="prompt" placeholder="Escribe aquí tu prompt..."></textarea></div>
-<div class="actions"><button onclick="closeDlg()">Cancelar</button><button class="primary" onclick="savePrompt()">Guardar</button></div>
+<div class="actions">
+  <button onclick="closeDlg()">Cancelar</button>
+  <button class="primary" type="button" onclick="savePrompt()">Guardar</button>
+</div>
 </div>
 </dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
