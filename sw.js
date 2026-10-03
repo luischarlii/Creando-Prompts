@@ -1,4 +1,4 @@
-const CACHE = 'mis-prompts-v2';
+const CACHE = 'mis-prompts-v3';
 
 const ARCHIVOS = [
   './',
@@ -11,6 +11,7 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE).then(cache => cache.addAll(ARCHIVOS))
   );
+
   self.skipWaiting();
 });
 
@@ -24,6 +25,7 @@ self.addEventListener('activate', event => {
       )
     )
   );
+
   self.clients.claim();
 });
 
