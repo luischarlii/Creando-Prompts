@@ -1,487 +1,1198 @@
 <!DOCTYPE html>
-<html lang="es"> 
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover">
+
   <meta name="theme-color" content="#111111">
+
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>LC ShortLinks</title>
+  <meta name="apple-mobile-web-app-title" content="Mis Prompts">
+
+  <link rel="apple-touch-icon" href="./logo.PNG">
+  <link rel="manifest" href="./manifest.json">
+
+  <title>Mis Prompts</title>
+
   <style>
+    :root {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      color: #111;
+      background: #f5f5f7;
+    }
+
     * {
       box-sizing: border-box;
     }
+
     body {
       margin: 0;
-      min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f5f5f7;
-      color: #111;
-      padding: 20px;
     }
+
     .app {
-      width: 100%;
-      max-width: 500px;
-      margin: 20px auto;
-      background: white;
-      border-radius: 28px;
-      padding: 30px 22px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.10);
+      max-width: 760px;
+      margin: auto;
+      padding: env(safe-area-inset-top) 16px 32px;
     }
-    .logo {
-      width: 80px;
-      height: 80px;
-      border-radius: 20px;
-      background: #111;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      font-weight: 800;
-      margin: 0 auto 18px;
-    }
-    h1 {
-      text-align: center;
-      margin: 0;
-      font-size: 30px;
-    }
-    .subtitle {
-      text-align: center;
-      color: #777;
-      margin: 8px 0 28px;
-    }
-    label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    input {
-      width: 100%;
-      padding: 16px;
-      border: 1px solid #ddd;
-      border-radius: 14px;
-      font-size: 16px;
-      outline: none;
-      margin-bottom: 18px;
-    }
-    input:focus {
-      border-color: #111;
-    }
-    button {
-      width: 100%;
-      padding: 16px;
-      border: 0;
-      border-radius: 14px;
-      background: #111;
-      color: white;
-      font-size: 17px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .hint {
-      color: #888;
-      font-size: 13px;
-      margin-top: -10px;
-      margin-bottom: 18px;
-    }
-    .result {
-      display: none;
-      margin-top: 24px;
-      padding: 18px;
-      background: #f5f5f7;
-      border-radius: 16px;
-    }
-    .short-url {
-      word-break: break-all;
-      font-weight: 600;
-      margin: 10px 0;
-    }
-    .copy {
-      background: white;
-      color: #111;
-      border: 1px solid #ddd;
-      margin-top: 10px;
-    }
-    .status {
-      text-align: center;
-      margin-top: 15px;
-      color: #777;
-      min-height: 20px;
-    }
-    .links-section {
-      margin-top: 30px;
-      border-top: 1px solid #eee;
-      padding-top: 24px;
-    }
-    .links-title {
+
+    header {
+      padding: 24px 4px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
     }
-    .links-title h2 {
+
+    h1 {
+      font-size: 32px;
       margin: 0;
-      font-size: 21px;
     }
-    .counter {
+
+    .sub {
+      color: #6e6e73;
+      margin-top: 4px;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .primary {
       background: #111;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 700;
+      color: #fff;
     }
-    .link-card {
-      background: #f5f5f7;
+
+    .search {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #ddd;
       border-radius: 16px;
-      padding: 15px;
-      margin-bottom: 12px;
+      background: white;
+      margin: 8px 0 14px;
     }
-    .link-name {
-      font-size: 17px;
-      font-weight: 700;
-      margin-bottom: 6px;
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      overflow: auto;
+      padding-bottom: 10px;
     }
-    .original {
-      color: #777;
-      font-size: 13px;
+
+    .chip {
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 12px;
+      background: white;
+      border: 1px solid #ddd;
+      padding: 9px 12px;
+      border-radius: 999px;
     }
-    .link-url {
+
+    .chip.active {
+      background: #111;
+      color: #fff;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 16px;
+      margin: 10px 0;
+      box-shadow: 0 1px 4px #00000010;
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+    }
+
+    .meta {
       font-size: 13px;
-      word-break: break-all;
-      margin-bottom: 12px;
-      color: #555;
+      color: #6e6e73;
+      margin-bottom: 10px;
     }
+
+    .prompt {
+      white-space: pre-wrap;
+      line-height: 1.4;
+      color: #333;
+      max-height: 120px;
+      overflow: hidden;
+    }
+
     .actions {
       display: flex;
       gap: 8px;
+      margin-top: 12px;
     }
+
     .actions button {
-      padding: 11px 8px;
-      font-size: 14px;
+      background: #f0f0f2;
+      color: #111;
+    }
+
+    .actions .primary {
+      background: #111;
+      color: #fff;
+    }
+
+    .actions .copy {
+      background: #111;
+      color: #fff;
+    }
+
+    dialog {
+      border: 0;
+      border-radius: 24px;
+      width: min(92%, 600px);
+      padding: 0;
+      box-shadow: 0 20px 60px #0005;
+    }
+
+    dialog::backdrop {
+      background: #0008;
+    }
+
+    .modal {
+      padding: 20px;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+    }
+
+    .field {
+      margin: 12px 0;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      background: #fafafa;
+    }
+
+    .field textarea {
+      min-height: 180px;
+      resize: vertical;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .row > * {
       flex: 1;
     }
-    .open-button {
-      background: #111;
-      color: white;
-    }
-    .copy-button {
-      background: white;
-      color: #111;
-      border: 1px solid #ddd;
-    }
+
     .empty {
       text-align: center;
-      color: #888;
-      font-size: 14px;
-      padding: 15px 5px;
+      color: #6e6e73;
+      padding: 50px 10px;
+    }
+
+    .count {
+      font-size: 13px;
+      color: #6e6e73;
+    }
+
+    /* PANTALLA DE BIENVENIDA */
+
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      background: #050b18;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+    }
+
+    #splash-screen img {
+      width: 75%;
+      max-width: 420px;
+      border-radius: 25px;
+    }
+
+    #splash-screen.oculto {
+      opacity: 0;
+      pointer-events: none;
     }
   </style>
 </head>
+
 <body>
-<main class="app">
-  <div class="logo">LC</div>
-  <h1>LC ShortLinks</h1>
-  <p class="subtitle">
-    Crea enlaces cortos personalizados
-  </p>
 
-Enlace original
+  <!-- PANTALLA DE BIENVENIDA -->
 
-<input
-id=“url”
-type=“url”
-placeholder=“https://youtube.com/…”
-autocomplete=“off”
-
-Nombre de tu enlace
-
-<input
-id=“code”
-type=“text”
-placeholder=“tunombre”
-autocomplete=“off”
-maxlength=“30”
-
-  <div class="hint">
-    Solo letras, números, guiones y guion bajo.
+  <div id="splash-screen">
+    <img src="./logo.PNG" alt="Mis Prompts">
   </div>
-  <button onclick="acortar()">
-    Crear enlace LC
-  </button>
-  <div id="result" class="result">
-<strong>Tu enlace corto:</strong>
-<div id="shortUrl" class="short-url"></div>
-<button class="copy" onclick="copiarResultado()">
-  📋 Copiar enlace
-</button>
-<button class="copy" onclick="compartirResultado()">
-  📤 Compartir
-</button>
+
+
+  <!-- APLICACIÓN -->
+
+  <div class="app">
+
+    <header>
+      <div>
+        <h1>Mis Prompts</h1>
+        <div class="sub">Tu biblioteca personal de IA</div>
+      </div>
+
+      <button class="primary" onclick="openNew()">
+        ＋ Nuevo
+      </button>
+    </header>
+
+
+    <!-- BUSCADOR -->
+
+    <input
+      id="search"
+      class="search"
+      placeholder="🔎 Buscar prompts..."
+      oninput="render()"
+    >
+
+
+    <!-- CATEGORÍAS -->
+
+    <div id="chips" class="chips"></div>
+
+
+    <!-- CONTADOR -->
+
+    <div class="count" id="count"></div>
+
+
+    <!-- LISTA -->
+
+    <div id="list"></div>
+
   </div>
-  <div id="status" class="status"></div>
-  <section class="links-section">
-<div class="links-title">
-  <h2>Mis enlaces</h2>
-  <span id="counter" class="counter">
-    0
-  </span>
-</div>
-<div id="linksList">
-  <div class="empty">
-    Cargando enlaces...
-  </div>
-</div>
-  </section>
-</main>
-<script>
-const SUPABASE_URL =
-"https://tfwepffzhuyppsavmoqw.supabase.co";
-const SUPABASE_KEY =
-"sb_publishable_4DOmAEAQ5tQv8U5zGgMHLg_m8u6N06J";
-async function acortar() {
-  const urlInput =
-    document.getElementById("url");
-  const codeInput =
-    document.getElementById("code");
-  const status =
-    document.getElementById("status");
-  const result =
-    document.getElementById("result");
-  const originalUrl =
-    urlInput.value.trim();
-  let code =
-    codeInput.value.trim().toLowerCase();
-  if (!originalUrl) {
-    status.textContent =
-      "Pega primero un enlace.";
-    return;
-  }
-  if (!code) {
-    status.textContent =
-      "Escribe el nombre de tu enlace.";
-    return;
-  }
-  try {
-    new URL(originalUrl);
-  } catch {
-    status.textContent =
-      "El enlace original no parece válido.";
-    return;
-  }
-  if (!/^[a-z0-9_-]+$/.test(code)) {
-    status.textContent =
-      "Usa solamente letras, números, guiones y guion bajo.";
-    return;
-  }
-  status.textContent =
-    "Creando enlace LC...";
-  result.style.display =
-    "none";
-  try {
-    const checkResponse =
-      await fetch(
-        `${SUPABASE_URL}/rest/v1/Links?code=eq.${encodeURIComponent(code)}&select=code`,
-        {
-          method: "GET",
-          headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization": `Bearer ${SUPABASE_KEY}`
-          }
-        }
+
+
+  <!-- VENTANA NUEVO / EDITAR -->
+
+  <dialog id="dlg">
+
+    <div class="modal">
+
+      <h2 id="dlgTitle">
+        Nuevo prompt
+      </h2>
+
+
+      <div class="field">
+
+        <label>
+          Título
+        </label>
+
+        <input
+          id="title"
+          placeholder="Ej. Vaquero cinematográfico"
+        >
+
+      </div>
+
+
+      <div class="row">
+
+        <div class="field">
+
+          <label>
+            Categoría
+          </label>
+
+          <select id="category"></select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Modelo
+          </label>
+
+          <select id="model">
+
+            <option>
+              Seedream 4.5
+            </option>
+
+            <option>
+              CapCut
+            </option>
+
+            <option>
+              Otro
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Formato
+        </label>
+
+        <select id="ratio">
+
+          <option>9:16</option>
+          <option>3:4</option>
+          <option>16:9</option>
+          <option>1:1</option>
+          <option>Otro</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Prompt
+        </label>
+
+        <textarea
+          id="prompt"
+          placeholder="Escribe aquí tu prompt..."
+        ></textarea>
+
+      </div>
+
+
+      <div class="actions">
+
+        <button onclick="closeDlg()">
+          Cancelar
+        </button>
+
+        <button
+          class="primary"
+          type="button"
+          onclick="savePrompt()"
+        >
+          Guardar
+        </button>
+
+      </div>
+
+    </div>
+
+  </dialog>
+
+
+  <!-- SUPABASE -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://fwacwaptqxhygifqfnsc.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_...";
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
       );
-    if (!checkResponse.ok) {
-      status.textContent =
-        "No se pudo comprobar el nombre.";
-      return;
+
+
+    /* CATEGORÍAS */
+
+    const cats = [
+      "Todos",
+      "CapCut",
+      "Seedream",
+      "Imágenes",
+      "Video",
+      "México",
+      "Vaquero",
+      "Religioso",
+      "Ideas"
+    ];
+
+
+    /* ESTADO */
+
+    let data = [];
+
+    let editing = null;
+
+    let active = "Todos";
+
+
+    const $ = id =>
+      document.getElementById(id);
+
+
+    /* ESCAPAR HTML */
+
+    function esc(value) {
+
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
     }
-    const existentes =
-      await checkResponse.json();
-    if (existentes.length > 0) {
-      status.textContent =
-        "Ese nombre ya está ocupado. Elige otro.";
-      return;
+
+
+    /* CARGAR PROMPTS */
+
+    async function cargarPrompts() {
+
+      const {
+        data: prompts,
+        error
+      } = await supabaseClient
+        .from("prompts")
+        .select("*")
+        .order("created_at", {
+          ascending: false
+        });
+
+
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "No se pudieron cargar los prompts."
+        );
+
+        return;
+
+      }
+
+
+      data = prompts || [];
+
+      render();
+
     }
-    const response =
-      await fetch(
-        `${SUPABASE_URL}/rest/v1/Links`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": SUPABASE_KEY,
-            "Authorization": `Bearer ${SUPABASE_KEY}`,
-            "Prefer": "return=representation"
-          },
-          body: JSON.stringify({
-            code: code,
-            original_url: originalUrl
-          })
-        }
+
+
+    /* MIGRAR PROMPTS ANTIGUOS */
+
+    async function migrarPromptsLocales() {
+
+      const locales =
+        JSON.parse(
+          localStorage.getItem("misPrompts") || "[]"
+        );
+
+
+      if (!locales.length) {
+        return;
+      }
+
+
+      const {
+        data: existentes,
+        error
+      } = await supabaseClient
+        .from("prompts")
+        .select("id");
+
+
+      if (error) {
+
+        console.error(error);
+
+        return;
+
+      }
+
+
+      const idsExistentes =
+        new Set(
+          (existentes || [])
+            .map(x => x.id)
+        );
+
+
+      const nuevos =
+        locales
+
+          .filter(
+            x => !idsExistentes.has(x.id)
+          )
+
+          .map(x => ({
+
+            id: x.id,
+
+            title:
+              x.title ||
+              "Sin título",
+
+            prompt:
+              x.prompt ||
+              "",
+
+            category:
+              x.category ||
+              "Ideas",
+
+            model:
+              x.model ||
+              "Otro",
+
+            ratio:
+              x.ratio ||
+              "9:16",
+
+            favorite:
+              !!x.favorite
+
+          }));
+
+
+      if (!nuevos.length) {
+        return;
+      }
+
+
+      const {
+        error: insertError
+      } = await supabaseClient
+        .from("prompts")
+        .insert(nuevos);
+
+
+      if (insertError) {
+
+        console.error(
+          "Error migrando prompts:",
+          insertError
+        );
+
+        return;
+
+      }
+
+
+      console.log(
+        "Prompts locales migrados correctamente."
       );
-    if (!response.ok) {
-      const error =
-        await response.text();
-      console.error(error);
-      status.textContent =
-        "No se pudo crear el enlace.";
-      return;
-    }
-    const shortUrl =
-      `${window.location.origin}${window.location.pathname}${code}`;
-    document.getElementById("shortUrl").textContent =
-      shortUrl;
-    result.style.display =
-      "block";
-    status.textContent =
-      "¡Enlace LC creado correctamente!";
-    cargarEnlaces();
-  } catch (error) {
-    console.error(error);
-    status.textContent =
-      "Error de conexión con Supabase.";
-  }
-}
-async function cargarEnlaces() {
-  const lista =
-    document.getElementById("linksList");
-  const counter =
-    document.getElementById("counter");
-  try {
-    const response =
-      await fetch(
-        `${SUPABASE_URL}/rest/v1/Links?select=code,original_url&order=code.asc`,
-        {
-          method: "GET",
-          headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization": `Bearer ${SUPABASE_KEY}`
-          }
-        }
+
+
+      /*
+        IMPORTANTE:
+        Conservamos la copia local
+        hasta comprobar que todo
+        se haya migrado correctamente.
+      */
+
+      console.log(
+        "Migración completada. Se conserva la copia local."
       );
-    if (!response.ok) {
-      lista.innerHTML =
-        `<div class="empty">
-          No se pudieron cargar los enlaces.
-        </div>`;
-      return;
+
     }
-    const enlaces =
-      await response.json();
-    counter.textContent =
-      enlaces.length;
-    if (enlaces.length === 0) {
-      lista.innerHTML =
-        `<div class="empty">
-          Todavía no tienes enlaces creados.
-        </div>`;
-      return;
+
+
+    /* INICIAR INTERFAZ */
+
+    function init() {
+
+      $("category").innerHTML =
+        cats
+          .filter(x => x !== "Todos")
+          .map(
+            x =>
+              `<option>${esc(x)}</option>`
+          )
+          .join("");
+
+
+      $("chips").innerHTML =
+        cats
+          .map(
+            x =>
+              `<button
+                class="chip ${x === "Todos" ? "active" : ""}"
+                onclick="setCat('${esc(x)}')"
+              >
+                ${esc(x)}
+              </button>`
+          )
+          .join("");
+
     }
-    lista.innerHTML =
-      "";
-    enlaces.forEach(enlace => {
-      const shortUrl =
-        `${window.location.origin}${window.location.pathname}${enlace.code}`;
-      const card =
-        document.createElement("div");
-      card.className =
-        "link-card";
-      card.innerHTML = `
-        <div class="link-name">
-          /${escapeHtml(enlace.code)}
-        </div>
-        <div class="original">
-          ${escapeHtml(enlace.original_url)}
-        </div>
-        <div class="link-url">
-          ${escapeHtml(shortUrl)}
-        </div>
-        <div class="actions">
-          <button
-            class="open-button"
-            onclick="abrirEnlace('${encodeURIComponent(shortUrl)}')">
-            🔗 Abrir
-          </button>
-          <button
-            class="copy-button"
-            onclick="copiarEnlace('${encodeURIComponent(shortUrl)}')">
-            📋 Copiar
-          </button>
-        </div>
-      `;
-      lista.appendChild(card);
-    });
-  } catch (error) {
-    console.error(error);
-    lista.innerHTML =
-      `<div class="empty">
-        Error de conexión.
-      </div>`;
-  }
-}
-function abrirEnlace(url) {
-  const enlace =
-    decodeURIComponent(url);
-  window.open(
-    enlace,
-    "_blank"
-  );
-}
-async function copiarEnlace(url) {
-  const enlace =
-    decodeURIComponent(url);
-  try {
-    await navigator.clipboard.writeText(
-      enlace
-    );
-    document.getElementById("status").textContent =
-      "Enlace copiado.";
-  } catch {
-    document.getElementById("status").textContent =
-      "No se pudo copiar el enlace.";
-  }
-}
-async function copiarResultado() {
-  const url =
-    document.getElementById("shortUrl").textContent;
-  try {
-    await navigator.clipboard.writeText(url);
-    document.getElementById("status").textContent =
-      "Enlace copiado.";
-  } catch {
-    document.getElementById("status").textContent =
-      "No se pudo copiar el enlace.";
-  }
-}
-async function compartirResultado() {
-  const url =
-    document.getElementById("shortUrl").textContent;
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: "LC ShortLinks",
-        url: url
+
+
+    /* INICIAR APP */
+
+    async function iniciarApp() {
+
+      await migrarPromptsLocales();
+
+      await cargarPrompts();
+
+    }
+
+
+    /* CAMBIAR CATEGORÍA */
+
+    function setCat(cat) {
+
+      active = cat;
+
+
+      document
+        .querySelectorAll(".chip")
+        .forEach(btn => {
+
+          btn.classList.toggle(
+            "active",
+            btn.textContent.trim() === cat
+          );
+
+        });
+
+
+      render();
+
+    }
+
+
+    /* MOSTRAR PROMPTS */
+
+    function render() {
+
+      const q =
+        $("search").value
+          .trim()
+          .toLowerCase();
+
+
+      const filtrados =
+        data.filter(x => {
+
+          const coincideCategoria =
+            active === "Todos" ||
+            x.category === active;
+
+
+          const coincideBusqueda =
+            !q ||
+            x.title
+              .toLowerCase()
+              .includes(q) ||
+            x.prompt
+              .toLowerCase()
+              .includes(q) ||
+            x.category
+              .toLowerCase()
+              .includes(q);
+
+
+          return (
+            coincideCategoria &&
+            coincideBusqueda
+          );
+
+        });
+
+
+      $("count").textContent =
+        `${filtrados.length} prompt${
+          filtrados.length === 1 ? "" : "s"
+        }`;
+
+
+      if (!filtrados.length) {
+
+        $("list").innerHTML =
+          `<div class="empty">
+            No hay prompts todavía.
+          </div>`;
+
+        return;
+
+      }
+
+
+      $("list").innerHTML =
+        filtrados
+          .map(x => `
+
+            <div class="card">
+
+              <h3>
+                ${esc(x.title)}
+              </h3>
+
+              <div class="meta">
+
+                ${esc(x.category)}
+                ·
+                ${esc(x.model)}
+                ·
+                ${esc(x.ratio)}
+
+              </div>
+
+              <div class="prompt">
+                ${esc(x.prompt)}
+              </div>
+
+
+              <div class="actions">
+
+                <button
+                  class="copy"
+                  onclick="copyPrompt('${esc(x.id)}')"
+                >
+                  Copiar
+                </button>
+
+                <button
+                  onclick="toggleFav('${esc(x.id)}')"
+                >
+                  ${x.favorite ? "★" : "☆"}
+                </button>
+
+                <button
+                  onclick="editPrompt('${esc(x.id)}')"
+                >
+                  Editar
+                </button>
+
+                <button
+                  onclick="delPrompt('${esc(x.id)}')"
+                >
+                  Eliminar
+                </button>
+
+              </div>
+
+            </div>
+
+          `)
+          .join("");
+
+    }
+
+
+    /* NUEVO */
+
+    function openNew() {
+
+      editing = null;
+
+      $("dlgTitle").textContent =
+        "Nuevo prompt";
+
+      $("title").value = "";
+
+      $("prompt").value = "";
+
+      $("category").value =
+        "Ideas";
+
+      $("model").value =
+        "Seedream 4.5";
+
+      $("ratio").value =
+        "9:16";
+
+
+      $("dlg").showModal();
+
+    }
+
+
+    /* EDITAR */
+
+    function editPrompt(id) {
+
+      const x =
+        data.find(
+          item => item.id === id
+        );
+
+
+      if (!x) return;
+
+
+      editing = id;
+
+
+      $("dlgTitle").textContent =
+        "Editar prompt";
+
+
+      $("title").value =
+        x.title || "";
+
+
+      $("prompt").value =
+        x.prompt || "";
+
+
+      $("category").value =
+        x.category || "Ideas";
+
+
+      $("model").value =
+        x.model || "Otro";
+
+
+      $("ratio").value =
+        x.ratio || "9:16";
+
+
+      $("dlg").showModal();
+
+    }
+
+
+    /* GUARDAR */
+
+    async function savePrompt() {
+
+      const obj = {
+
+        id:
+          editing ||
+          crypto.randomUUID(),
+
+        title:
+          $("title").value.trim() ||
+          "Sin título",
+
+        prompt:
+          $("prompt").value.trim(),
+
+        category:
+          $("category").value,
+
+        model:
+          $("model").value,
+
+        ratio:
+          $("ratio").value,
+
+        favorite:
+          editing
+            ? !!data.find(
+                x => x.id === editing
+              )?.favorite
+            : false
+
+      };
+
+
+      let error;
+
+
+      if (editing) {
+
+        const result =
+          await supabaseClient
+
+            .from("prompts")
+
+            .update(obj)
+
+            .eq("id", editing);
+
+
+        error =
+          result.error;
+
+      } else {
+
+        const result =
+          await supabaseClient
+
+            .from("prompts")
+
+            .insert(obj);
+
+
+        error =
+          result.error;
+
+      }
+
+
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "No se pudo guardar el prompt."
+        );
+
+        return;
+
+      }
+
+
+      closeDlg();
+
+      await cargarPrompts();
+
+    }
+
+
+    /* CERRAR */
+
+    function closeDlg() {
+
+      $("dlg").close();
+
+    }
+
+
+    /* COPIAR */
+
+    async function copyPrompt(id) {
+
+      const x =
+        data.find(
+          item => item.id === id
+        );
+
+
+      if (!x) return;
+
+
+      try {
+
+        await navigator.clipboard.writeText(
+          x.prompt
+        );
+
+
+        alert(
+          "Prompt copiado."
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "No se pudo copiar."
+        );
+
+      }
+
+    }
+
+
+    /* FAVORITO */
+
+    async function toggleFav(id) {
+
+      const x =
+        data.find(
+          item => item.id === id
+        );
+
+
+      if (!x) return;
+
+
+      const {
+        error
+      } = await supabaseClient
+
+        .from("prompts")
+
+        .update({
+          favorite: !x.favorite
+        })
+
+        .eq("id", id);
+
+
+      if (error) {
+
+        console.error(error);
+
+        return;
+
+      }
+
+
+      await cargarPrompts();
+
+    }
+
+
+    /* ELIMINAR */
+
+    async function delPrompt(id) {
+
+      const x =
+        data.find(
+          item => item.id === id
+        );
+
+
+      if (!x) return;
+
+
+      const confirmar =
+        confirm(
+          `¿Eliminar "${x.title}"?`
+        );
+
+
+      if (!confirmar) {
+        return;
+      }
+
+
+      const {
+        error
+      } = await supabaseClient
+
+        .from("prompts")
+
+        .delete()
+
+        .eq("id", id);
+
+
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "No se pudo eliminar."
+        );
+
+        return;
+
+      }
+
+
+      await cargarPrompts();
+
+    }
+
+
+    /* INICIAR */
+
+    init();
+
+    iniciarApp();
+
+
+    /* SERVICE WORKER */
+
+    if ("serviceWorker" in navigator) {
+
+      navigator.serviceWorker.register(
+        "./sw.js"
+      )
+
+      .then(() => {
+
+        console.log(
+          "Service Worker registrado."
+        );
+
+      })
+
+      .catch(error => {
+
+        console.error(
+          "Error Service Worker:",
+          error
+        );
+
       });
-    } catch (error) {
-      console.log(error);
+
     }
-  } else {
-    copiarResultado();
-  }
-}
-function escapeHtml(text) {
-  const div =
-    document.createElement("div");
-  div.textContent =
-    text;
-  return div.innerHTML;
-}
-cargarEnlaces();
-</script>
+
+
+    /* QUITAR SPLASH */
+
+    window.addEventListener(
+      "load",
+      function () {
+
+        setTimeout(
+          function () {
+
+            const splash =
+              document.getElementById(
+                "splash-screen"
+              );
+
+
+            if (splash) {
+
+              splash.classList.add(
+                "oculto"
+              );
+
+
+              setTimeout(
+                function () {
+
+                  splash.remove();
+
+                },
+                600
+              );
+
+            }
+
+          },
+          1800
+        );
+
+      }
+    );
+
+  </script>
+
 </body>
 </html>
